@@ -1,0 +1,29 @@
+2017-08-23 Zhenjia Wang <zhenjia@virginia.edu>
+	
+	### BART version 1.0.1
+	
+	**Output file format**
+	
+	Add the max auc score for each TF in the final results, and rank all TFs by the average rank of zscore, pvalue and max auc
+	
+	
+	**Output file names prefix**
+	
+	Name_final_results.txt
+	
+	
+	**include the CHANGE.log in MANIFEST.in**
+	
+	
+	**bug fixes**
+	
+	convert values in variable `positions` into int format before the auc calculation step -- AUCcalc.py line 139, line 145, line 62
+	
+	fix a bug in the way to print dot on screen -- AUCcalc.py line 179 
+	
+	include the test data in setup -- setup.py line 38, line 39
+	
+	
+2017-10-18 Zhenjia Wang <zhenjia@virginia.edu>
+	
+	use the relative-rank
