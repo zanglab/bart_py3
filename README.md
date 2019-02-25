@@ -9,7 +9,9 @@ BART is implemented in Python and distributed as an open-source package along wi
 
 BART is developed and maintained by the [Chongzhi Zang Lab](http://faculty.virginia.edu/zanglab/) at the University of Virginia.
 
-**We only provide the source code package on github. In order to run BART, you have to download the [Data Libraries](http://faculty.virginia.edu/zanglab/bart/index.htm#download), or you can download the [full package](http://faculty.virginia.edu/zanglab/bart/index.htm#download).**
+**We only provide the source code package on github. In order to run BART, you have to download the [Data Libraries](http://faculty.virginia.edu/zanglab/bart/index.htm#download).**
+
+BART web interface (Beta version) can be accessed [here](http://bartweb.uvasomrc.io/).
 
 
 ## Installation
@@ -25,15 +27,21 @@ BART uses Python's distutils tools for source installation. Before installing BA
 - [matplotlib](https://matplotlib.org/users/installing.html)
 
 
-### Install the full package (All data included, requires at least 30GB hard drive storage in the installation directory)
+### Install from source package without data libraries 
+
+You can download the [Human or Mouse Data Library](http://faculty.virginia.edu/zanglab/bart/index.htm#download) separately under your own directory. In this case, you have to edit the config file (e.g. `BART1.1/BART/bart.conf`) after you unpack the source package to provide the directory for the data. For example, if you download the `hg38_library.tar.gz` (or `mm10_library.tar.gz`) and unpack it under `/path/to/data`, then you can modify the bart.conf file as:
+
+```shell
+hg38_library_dir = /path/to/data/
+```
 
 To install a source distribution of BART, unpack the distribution tarball and open up a command terminal. Go to the directory where you unpacked BART, and simply run the install script an install BART globally or locally. 
 
-e.g., if you want to install the package `BART-v1.0.1-py3-full.tar.gz`:
+e.g., if you want to install the package `BART-v1.1-py3.tar.gz`:
 
 ```shell
-$ tar zxf BART-v1.0.1-py3-full.tar.gz
-$ cd BART-v1.0.1-py3-full
+$ tar zxf BART-v1.1-py3.tar.gz
+$ cd BART-v1.1-py3
 ```
 
 Install with root/administrator permission (by default, the script will install python library and executable codes globally):
@@ -64,15 +72,6 @@ You’ll need to add those two lines in your bash file (varies on each platform,
 ```
 
 
-### Install from source package without data libraries (recommended)
-
-You can download the [Human or Mouse Data Library](http://faculty.virginia.edu/zanglab/bart/index.htm#download) separately under your own directory. In this case, you have to edit the config file (e.g. `BART1.0.1/BART/bart.conf`) after you unpack the source package to provide the directory for the data. For example, if you download the `hg38_library.tar.gz` (or `mm10_library.tar.gz`) and unpack it under `/path/to/library`, then you can modify the bart.conf file as:
-
-```shell
-hg38_library_dir = /path/to/library/
-```
-
-Then you can run the install script and install BART source package globally or locally same as the full package described above.
  
 
 ## Tutorial
@@ -236,10 +235,19 @@ FOXA1_50274	    AUC = 0.924
 AR_50042	    AUC = 0.921
 ```
 
-2. **name_bart_results.txt** is a ranking list of all TFs, which includes the Wilcoxon statistic score, Wilcoxon *p* value, standard Wilcoxon statistic score (z score), maximum ROC-AUC score and and rank score (average rank of z score, *p* value and max auc) for each TF. The most functional TFs of input data are ranked first. The file should be like this:
+2. **name_bart_results.txt** is a ranking list of all TFs, which includes the Wilcoxon statistic score, Wilcoxon p value, standard Wilcoxon statistic score (zscore), maximum ROC-AUC score, rank score (relative rank of z score, p value and max auc) and Irwin Hall p value (p value for the relative rank) for each TF. The most functional TFs of input data are ranked first. The file should be like this:
 ```
-TF	statistic	pvalue	zscore	max_auc	rela_rankAR	18.654	1.172e-77	3.024	0.954	0.004FOXA1	13.272	3.346e-40	2.847	0.924	0.008SUMO2	5.213	1.854e-07	3.494	0.749	0.021PIAS1	3.987	6.679e-05	2.802	0.872	0.025HOXB13	3.800	1.446e-04	2.632	0.909	0.027GATA3	5.800	6.633e-09	2.549	0.769	0.028NR3C1	4.500	6.789e-06	2.042	0.871	0.040GATA6	4.240	2.237e-05	2.602	0.632	0.048ESR1	12.178	4.057e-34	1.956	0.700	0.049CEBPB	5.265	1.404e-07	2.287	0.602	0.057ATF4	3.216	1.302e-03	2.348	0.658	0.065TOP1	2.254	2.421e-02	3.057	0.779	0.065
-
+TF	statistic	pvalue	zscore	max_auc	re_rank	irwin_hall_pvalue
+AR	18.654	5.861e-78	3.024	0.954	0.004	3.733e-07
+FOXA1	13.272	1.673e-40	2.847	0.924	0.008	2.300e-06
+PIAS1	3.987	3.339e-05	2.802	0.872	0.017	2.389e-05
+SUMO2	5.213	9.269e-08	3.494	0.749	0.018	2.700e-05
+HOXB13	3.800	7.230e-05	2.632	0.909	0.019	3.037e-05
+GATA3	5.800	3.316e-09	2.549	0.769	0.025	7.410e-05
+TOP1	2.254	1.210e-02	3.057	0.779	0.026	8.063e-05
+HDAC3	2.310	1.044e-02	2.478	0.845	0.033	1.682e-04
+NR3C1	4.500	3.394e-06	2.042	0.871	0.036	2.160e-04
+GATA6	4.240	1.118e-05	2.602	0.632	0.043	3.549e-04
 ```
 
-3. **name_plot** is a folder which contains all the extra plots for the TFs listed in target files (target.txt file in test data). For each TF, we have boxplot, which shows the rank position of this TF in all TFs (derived from the rank score inname_bart_results.txt), and the cumulative distribution plot, which compares the distribution of ROC-AUC scores from datasets of this TF and the scores of all datasets (derived from the AUC scores in name_auc.txt).
+3. **name_plot** is a folder which contains all the extra plots for the TFs listed in target files (target.txt file in test data). For each TF, we have rank dot plot, which shows the rank position of the TF amont all TFs on x-axis and Irwin Hall p value on y-axis (derived from the rank score in name_bart_results.txt), and the cumulative distribution plot, which compares the distribution of ROC-AUC scores from datasets of the TF and the scores of all background datasets (derived from the AUC scores in name_auc.txt).
