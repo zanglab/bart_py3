@@ -21,7 +21,7 @@ import multiprocessing
 from BART.StatTest import stat_test
 from BART.OptValidator import opt_validate,conf_validate
 from BART.ReadCount import read_count_on_DHS
-
+import bz2
 
 def get_file(filedir,match):
     mark = re.compile(match)
@@ -56,9 +56,14 @@ def get_match_list(tf, tfdir,positions):
     '''
     Return the binding info on DHS
     '''   
-    fname = tf+'_DHS_01.txt'
-    tf = open(os.path.join(tfdir,fname), 'rb') 
-    lines = tf.raw.read()
+    ## .txt format
+#     fname = tf+'_DHS_01.txt'
+#     tf = open(os.path.join(tfdir,fname), 'rb') 
+#     lines = tf.raw.read()
+    ## .bz2 format
+    fname = tf+'_DHS_01.txt.bz2'
+    tf = bz2.open(os.path.join(tfdir,fname),'r')
+    lines = tf.read()
     match = [lines[2*position-2]-ord('0') for position in positions]
     tf.close()
     return match
@@ -109,16 +114,19 @@ def roc_auc(total, list_t, list_f):
 
 def cal_auc_for_tf(tf_p):
     tf,tfdir,positions = tf_p
+#    time1 = time.time()    
     match = get_match_list(tf,tfdir,positions)
     (t, lt, lf) = partion(match)
     (list_x, list_y, auc) = roc_auc(t, lt,lf)
+#    time2 = time.time()
+#    print(time2-time1)
     return tf,auc
 
 def run(options):
 
     args = opt_validate(options)
     tfs = get_file(args.tfdir,'DHS_01')
-    #print(tfs)
+    
     if len(tfs) == 0:
         sys.stderr.write('Please specify correct directory of TF binding profiles!') 
         sys.exit(1)   
@@ -126,6 +134,18 @@ def run(options):
         os.makedirs(args.outdir,exist_ok=True)
     except:
         sys.exit('Output directory: {} could not be created.'.format(args.outdir))
+
+    # This part is for the auc.txt input
+    #if args.auc:
+    #    AUCs = {}
+    #    with open(args.infile,'r') as auc_infile:
+    #        for auc_line in auc_infile.readlines():
+    #            auc_info = auc_line.strip().split()
+    #            AUCs[auc_info[0]] = float(auc_info[-1])
+    #    #print(AUCs)
+    #    stat_test(AUCs,args)
+    #    exit(0)
+    # print(args,'\n') 
     
     if args.subcommand_name == 'geneset':
         print('Prediction starts...\n\nRank all DHS...\n')
@@ -149,9 +169,10 @@ def run(options):
     aucfile = args.outdir+os.sep+args.ofilename+'_auc.txt'
     
     sys.stdout.write("Calculating ROC-AUC values for all transcription factors:\n\n")
-    #print(args)
+    print(args)
 
     tf_ps = [(tf,args.tfdir,positions) for tf in tfs]
+    print(len(tf_ps),'#TF datasets')###########
     AUCs = {}
     # always multiprocessing
     if args.processes:  

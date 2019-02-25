@@ -1,10 +1,10 @@
 Metadata-Version: 1.1
 Name: BART
-Version: v1.0.1-py3-source
+Version: v1.1-py3
 Summary: Binding Analysis for Regulatory Transcription Factors of Genes
 Home-page: UNKNOWN
-Author: Zhanjia Wang
-Author-email: zhenjia@virginia.edu
+Author: Zhanjia Wang, Chongzhi Zang
+Author-email: zhenjia@virginia.edu, zang@virginia.edu
 License: UNKNOWN
 Description: UNKNOWN
 Platform: UNKNOWN

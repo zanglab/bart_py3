@@ -1,7 +1,6 @@
 CHANGE.log
 MANIFEST.in
 README.rst
-setup.cfg
 setup.py
 BART/AUCcalc.py
 BART/IOparser.py

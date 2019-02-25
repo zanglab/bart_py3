@@ -29,8 +29,8 @@ def main():
     setup(name="BART",
           version=BART.__version__,
           description="Binding Analysis for Regulatory Transcription Factors of Genes",
-          author='Zhanjia Wang',
-          author_email='zhenjia@virginia.edu',
+          author='Zhanjia Wang, Chongzhi Zang',
+          author_email='zhenjia@virginia.edu, zang@virginia.edu',
           url='',
           #package_dir={'':'BART'},
           packages=find_packages(),#['BART'],
@@ -57,6 +57,7 @@ def main():
               'pandas',
               'scipy',
               'matplotlib',
+#              'bz2',
               ],
           #cmdclass = command_classes,
           

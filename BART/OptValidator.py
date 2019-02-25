@@ -13,15 +13,14 @@ under the terms of the BSD License.
 '''
 
 import configparser
-import os
+import os,re,sys
 
 
 def conf_validate():
 
     # read user provided path from config file
     config = configparser.ConfigParser()
-    pdir = os.path.dirname
-    config.read(os.path.join(pdir(__file__),'bart.conf'))
+    config.read(os.path.join(os.path.dirname(os.path.abspath(__file__)),'bart.conf'))
 
     return  config
 
@@ -35,7 +34,8 @@ def opt_validate(options):
         #chroms = hg_chrom
 
     if not options.ofilename:
-        infilebase = os.path.basename(options.infile).split('.')[0] 
+        #infilebase = os.path.basename(options.infile).split('.txt')[0] 
+        infilebase = re.split('.txt|.bed|.bam',os.path.basename(options.infile))[0] 
         if "_".join(infilebase.split('_')[-2:]) == "enhancer_prediction":
             options.ofilename = "_".join(infilebase.split('_')[:-2])
         else :
@@ -47,13 +47,17 @@ def opt_validate(options):
         if config['path']['hg38_library_dir']:
             data_dir = config['path']['hg38_library_dir']+os.sep+'hg38_library' 
         else:
-            data_dir = os.path.dirname(__file__)+os.sep+'hg38_library'
+            sys.stderr.write('ERROR!! The path to the data library need to be specified!\n') 
+            sys.stderr.write('Please revise the <bart.conf> file before installation!\n\n') 
+            sys.exit(1)  
+            #data_dir = os.path.dirname(__file__)+os.sep+'hg38_library'
         
-        #if config['path']['hg38_data_tf_dir']:
-        #    options.tfdir = config['path']['hg38_data_tf_dir']  
-        #else:
-        #    options.tfdir = data_dir+os.sep+'hg38_TF_binding'  
-        options.tfdir = data_dir+os.sep+'hg38_TF_binding'        
+        #used for local test
+        try:
+            options.tfdir = config['path']['hg38_data_tf_dir']  
+        except:
+            options.tfdir = data_dir+os.sep+'hg38_TF_binding'  
+        
         if options.subcommand_name == 'geneset':
             options.normfile = data_dir+os.sep+'hg38_MSigDB.dat'           
         elif options.subcommand_name=='profile':
@@ -65,13 +69,17 @@ def opt_validate(options):
         if config['path']['mm10_library_dir']:
             data_dir = config['path']['mm10_library_dir']+os.sep+'mm10_library' 
         else:
-            data_dir = os.path.dirname(__file__)+os.sep+'mm10_library'
+            sys.stderr.write('ERROR!! The path to the data library need to be specified!\n') 
+            sys.stderr.write('Please revise the <bart.conf> file before installation!\n\n') 
+            sys.exit(1)  
+            #data_dir = os.path.dirname(__file__)+os.sep+'mm10_library'
             
-        #if config['path']['mm10_data_tf_dir']:
-        #    options.tfdir = config['path']['mm10_data_tf_dir']  
-        #else:
-        #    options.tfdir = data_dir+os.sep+'mm10_TF_binding'        
-        options.tfdir = data_dir+os.sep+'mm10_TF_binding'     
+        # used for local test
+        try:
+            options.tfdir = config['path']['mm10_data_tf_dir']  
+        except:
+            options.tfdir = data_dir+os.sep+'mm10_TF_binding'        
+        
         if options.subcommand_name == 'geneset':
             options.normfile = data_dir+os.sep+'mm10_H3K27ac.dat'           
         elif options.subcommand_name=='profile':
