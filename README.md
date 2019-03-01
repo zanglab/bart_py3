@@ -1,5 +1,5 @@
 
-# README for BART(v1.0.1)
+# README for BART(v1.1)
 
 ## Introduction
 
