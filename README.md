@@ -1,6 +1,11 @@
 
 # README for BART(v1.1)
 
+
+### !!! BART has been updated. For the newest BART v2.0, please refer [here](https://github.com/zanglab/bart2)
+
+
+
 ## Introduction
 
 [BART](http://faculty.virginia.edu/zanglab/bart) (**B**inding **A**nalysis for **R**egulation of **T**ranscription) is a bioinformatics tool for predicting functional transcription factors (TFs) that bind at genomic cis-regulatory regions to regulate gene expression in the human or mouse genomes, given a query gene set or a ChIP-seq dataset as input. BART leverages 3,485 human TF binding profiles and 3,055 mouse TF binding profiles from the public domain (collected in Cistrome Data Browser) to make the prediction.
